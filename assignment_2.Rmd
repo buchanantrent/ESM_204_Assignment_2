@@ -16,8 +16,6 @@ library(here)
 data <- read_csv(here("HW2_Water_Data.csv")) %>% 
   clean_names()
 
-data_inverse <- read_csv(here("HW2_Water_Data_buchanan.csv")) %>% clean_names()
-
 ag <- data %>% 
   select(reduced_water_use_abatement, mc_agriculture)
 
@@ -26,6 +24,5 @@ agplot <- ggplot(data = ag, aes(x = reduced_water_use_abatement, y = mc_agricult
 
 agplot
 
-lm()
+ag_lm <- lm(formula = mc_agriculture ~ reduced_water_use_abatement, data = ag)
 ```
-
