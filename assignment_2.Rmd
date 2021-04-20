@@ -1,0 +1,20 @@
+---
+title: "Assignment_2"
+author: "Trent Buchanan"
+date: "4/19/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(janitor)
+library(here)
+```
+
+```{r, include=FALSE}
+data <- read_csv(here("HW2_Water_Data.csv")) %>% 
+  clean_names()
+
+```
+
