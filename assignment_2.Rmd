@@ -10,19 +10,62 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(janitor)
 library(here)
+library(broom)
+library(ggpubr)
+library(patchwork)
 ```
 
 ```{r, include=FALSE}
 data <- read_csv(here("HW2_Water_Data.csv")) %>% 
   clean_names()
 
+data_inverse <- read.csv(here("HW2_Water_Data_buchanan.csv")) %>% 
+  clean_names()
+```
+
+```{r}
 ag <- data %>% 
   select(reduced_water_use_abatement, mc_agriculture)
 
 agplot <- ggplot(data = ag, aes(x = reduced_water_use_abatement, y = mc_agriculture)) +
   geom_point()
 
-agplot
-
 ag_lm <- lm(formula = mc_agriculture ~ reduced_water_use_abatement, data = ag)
+
+abatement_agplot <- agplot + geom_smooth(method = "lm") + stat_regline_equation(label.x = 75, label.y = 87.5)
+```
+
+```{r}
+meat <- data %>% 
+  select(reduced_water_use_abatement, mc_meat)
+
+meatplot <- ggplot(data = meat, aes(x = reduced_water_use_abatement, y = mc_meat)) +
+  geom_point()
+
+meat_lm <- lm(formula = mc_meat ~ reduced_water_use_abatement, data = meat)
+
+abatement_meatplot <- meatplot + geom_smooth(method = "lm") + stat_regline_equation(label.x = 75, label.y = 87.5)
+```
+
+```{r}
+industrial <- data %>% 
+  select(reduced_water_use_abatement, mc_industrial) %>% 
+  mutate(line = 1.13*(mc_industrial) - 26.81)
+
+indus_dummy <- c(11.5, 67.3, 178.9)
+
+indus_df <- data.frame(indus_dummy) %>% 
+  mutate(dummy = 1.13*(indus_dummy) - 26.81) 
+  
+
+industrialplot <- ggplot(data = industrial, aes(x = reduced_water_use_abatement, y = mc_industrial)) +
+  geom_point()
+
+industrial_lm <- lm(formula = mc_industrial ~ reduced_water_use_abatement, data = industrial)
+
+abatement_industrialplot <- industrialplot + geom_smooth(method = "lm") + stat_regline_equation(label.x = 75, label.y = 87.5)
+
+ggplot() +
+  geom_point(data = industrial, aes(x = reduced_water_use_abatement, y = mc_industrial)) +
+  geom_line(data = industrial, aes(y = line, x = mc_industrial))
 ```
