@@ -16,56 +16,88 @@ library(patchwork)
 ```
 
 ```{r, include=FALSE}
-data <- read_csv(here("HW2_Water_Data.csv")) %>% 
-  clean_names()
-
-data_inverse <- read.csv(here("HW2_Water_Data_buchanan.csv")) %>% 
+abate <- read.csv(here("HW2_Water_Data_buchanan.csv")) %>% 
   clean_names()
 ```
 
 ```{r}
-ag <- data %>% 
-  select(reduced_water_use_abatement, mc_agriculture)
+ag_lm <- lm(formula = mc_agriculture ~ reduced_water_use_abatement, data = abate)
 
-agplot <- ggplot(data = ag, aes(x = reduced_water_use_abatement, y = mc_agriculture)) +
-  geom_point()
+ag <- abate %>% 
+  select(reduced_water_use_abatement, mc_agriculture) %>% 
+  mutate(line = 0.51*(reduced_water_use_abatement) + 1.94)
 
-ag_lm <- lm(formula = mc_agriculture ~ reduced_water_use_abatement, data = ag)
+agplotv1 <- ggplot(data = ag, aes(x = reduced_water_use_abatement, y = mc_agriculture)) +
+  geom_point() + 
+  geom_smooth(method = "lm") + 
+  stat_regline_equation(label.x = 75, label.y = 87.5)
 
-abatement_agplot <- agplot + geom_smooth(method = "lm") + stat_regline_equation(label.x = 75, label.y = 87.5)
+agplotv2 <- ggplot() +
+  geom_point(data = ag, aes(x = reduced_water_use_abatement, y = mc_agriculture)) +
+  geom_line(data = ag, aes(y = line, x = reduced_water_use_abatement)) +
+  annotate(geom = "text", x=50, y=75, label="y = 0.51x + 1.94") +
+  theme_bw() 
+
+agplotv2
 ```
 
 ```{r}
-meat <- data %>% 
-  select(reduced_water_use_abatement, mc_meat)
+meat_lm <- lm(formula = mc_meat ~ reduced_water_use_abatement, data = abate)
 
-meatplot <- ggplot(data = meat, aes(x = reduced_water_use_abatement, y = mc_meat)) +
-  geom_point()
+meat <- abate %>% 
+  select(reduced_water_use_abatement, mc_meat) %>% 
+  mutate(line = 0.375 * (reduced_water_use_abatement) + 9.481)
 
-meat_lm <- lm(formula = mc_meat ~ reduced_water_use_abatement, data = meat)
+meatplotv1 <- ggplot(data = meat, aes(x = reduced_water_use_abatement, y = mc_meat)) +
+  geom_point() + 
+  geom_smooth(method = "lm") + 
+  stat_regline_equation(label.x = 75, label.y = 87.5)
 
-abatement_meatplot <- meatplot + geom_smooth(method = "lm") + stat_regline_equation(label.x = 75, label.y = 87.5)
+meatplotv2 <- ggplot() +
+  geom_point(data = meat, aes(x = reduced_water_use_abatement, y = mc_meat)) +
+  geom_line(data = meat, aes(y = line, x = reduced_water_use_abatement)) +
+  annotate(geom = "text", x=50, y=70, label="y = 0.375x + 9.481") +
+  theme_bw()
+
+meatplotv2
 ```
 
 ```{r}
-industrial <- data %>% 
+industrial_lm <- lm(formula = mc_industrial ~ reduced_water_use_abatement, data = abate)
+
+industrial <- abate %>% 
   select(reduced_water_use_abatement, mc_industrial) %>% 
   mutate(line = 1.13*(mc_industrial) - 26.81)
 
-indus_dummy <- c(11.5, 67.3, 178.9)
-
-indus_df <- data.frame(indus_dummy) %>% 
-  mutate(dummy = 1.13*(indus_dummy) - 26.81) 
-  
-
-industrialplot <- ggplot(data = industrial, aes(x = reduced_water_use_abatement, y = mc_industrial)) +
-  geom_point()
-
-industrial_lm <- lm(formula = mc_industrial ~ reduced_water_use_abatement, data = industrial)
-
-abatement_industrialplot <- industrialplot + geom_smooth(method = "lm") + stat_regline_equation(label.x = 75, label.y = 87.5)
-
-ggplot() +
+industrialplot <- ggplot() +
   geom_point(data = industrial, aes(x = reduced_water_use_abatement, y = mc_industrial)) +
-  geom_line(data = industrial, aes(y = line, x = mc_industrial))
+  geom_line(data = industrial, aes(y = line, x = mc_industrial)) +
+  annotate(geom = "text", x=50, y=150, label="y = 1.13x - 26.81") +
+  theme_bw()
+
+industrialplot
 ```
+
+```{r}
+urban_lm <- lm(formula = mc_urban ~ reduced_water_use_abatement, data = abate)
+
+urban <- abate %>% 
+  select(reduced_water_use_abatement, mc_urban) %>% 
+  mutate(line = 0.597*(reduced_water_use_abatement) - 13.829)
+
+urbanplot <- ggplot() +
+  geom_point(data = urban, aes(x = reduced_water_use_abatement, y = mc_urban)) +
+  geom_line(data = urban, aes(y = line, x = reduced_water_use_abatement)) +
+  annotate(geom = "text", x=50, y=75, label="y = 0.597x - 13.829") +
+  theme_bw()
+
+urbanplot
+```
+
+
+
+
+
+
+
+
