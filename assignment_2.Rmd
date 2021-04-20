@@ -16,5 +16,14 @@ library(here)
 data <- read_csv(here("HW2_Water_Data.csv")) %>% 
   clean_names()
 
+ag <- data %>% 
+  select(reduced_water_use_abatement, mc_agriculture)
+
+agplot <- ggplot(data = ag, aes(x = reduced_water_use_abatement, y = mc_agriculture)) +
+  geom_point()
+
+agplot
+
+lm()
 ```
 
