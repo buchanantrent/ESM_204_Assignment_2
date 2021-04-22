@@ -94,10 +94,51 @@ urbanplot <- ggplot() +
 urbanplot
 ```
 
+```{r}
+ag_inv <- abate %>% 
+  select(reduced_water_use_abatement, water_agriculture_inverse)
 
+ag_invplot <- ggplot(data = ag_inv) +
+  geom_line(aes(x = reduced_water_use_abatement, y = water_agriculture_inverse)) +
+  geom_point(aes(x = reduced_water_use_abatement, y = water_agriculture_inverse)) +
+  theme_bw()
 
+ag_invplot
+```
 
+```{r}
+meat_inv <- abate %>% 
+  select(reduced_water_use_abatement, water_meat_inverse)
 
+meat_invplot <- ggplot(data = meat_inv) +
+  geom_line(aes(x = reduced_water_use_abatement, y = water_meat_inverse)) +
+  geom_point(aes(x = reduced_water_use_abatement, y = water_meat_inverse)) +
+  theme_bw()
 
+meat_invplot
+```
 
+```{r}
+industrial_inv <- abate %>% 
+  select(reduced_water_use_abatement, water_industrial_inverse)
+
+industrial_invplot <- ggplot(data = industrial_inv) +
+  geom_line(aes(x = reduced_water_use_abatement, y = water_industrial_inverse)) +
+  geom_point(aes(x = reduced_water_use_abatement, y = water_industrial_inverse)) +
+  theme_bw()
+
+industrial_invplot
+```
+
+```{r}
+urban_inv <- abate %>% 
+  select(reduced_water_use_abatement, water_urban_inverse)
+
+urban_invplot <- ggplot(data = urban_inv) +
+  geom_line(aes(x = reduced_water_use_abatement, y = water_urban_inverse)) +
+  geom_point(aes(x = reduced_water_use_abatement, y = water_urban_inverse)) +
+  theme_bw()
+
+urban_invplot
+```
 
