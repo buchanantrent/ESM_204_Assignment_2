@@ -142,3 +142,8 @@ urban_invplot <- ggplot(data = urban_inv) +
 urban_invplot
 ```
 
+```{r}
+agplotv2 + meatplotv2 + industrialplot + urbanplot +
+  plot_annotation(tag_levels = "a")
+```
+
