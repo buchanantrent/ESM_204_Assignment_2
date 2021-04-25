@@ -76,6 +76,10 @@ industrialplot <- ggplot() +
   theme_bw()
 
 industrialplot
+
+industrial_fix <- data.frame(c(0, 150)) %>% 
+  rename(reduced_water_use_abatement = c.0..150.) %>% 
+  mutate(line = 1.13*(reduced_water_use_abatement) - 26.81)
 ```
 
 ```{r}
@@ -93,6 +97,20 @@ urbanplot <- ggplot() +
 
 urbanplot
 ```
+
+```{r}
+mcgraph <- ggplot() +
+  geom_line(data = ag, aes(x = reduced_water_use_abatement, y = line), color = "green") +
+  geom_line(data = meat, aes(x = reduced_water_use_abatement, y = line), color = "red") +
+  geom_line(data = industrial_fix, aes(y = line, x = reduced_water_use_abatement), color = "grey") +
+  geom_line(data = urban, aes(x = reduced_water_use_abatement, y = line), color = "black") +
+  labs(x = "Water Use Abatement, AF (Q)", y = "$/AF Abatement (P)") +
+  theme_bw()
+
+mcgraph
+```
+
+
 
 ```{r}
 ag_inv <- abate %>% 
@@ -145,5 +163,26 @@ urban_invplot
 ```{r}
 agplotv2 + meatplotv2 + industrialplot + urbanplot +
   plot_annotation(tag_levels = "a")
+
+fullmcplot <- ggplot() +
+  #geom_line(data = ag, aes(x = reduced_water_use_abatement, y = line)) +
+  geom_line(data = meat, aes(x = reduced_water_use_abatement, y = line)) +
+  #geom_line(data = industrial, aes(x = reduced_water_use_abatement, y = line)) +
+  geom_line(data = urban, aes(x = reduced_water_use_abatement, y = line)) +
+  theme_bw()
+
+fullmcplot
 ```
 
+
+```{r}
+aggregateplot <- ggplot() +
+  geom_line(data = urban_inv, aes(x= reduced_water_use_abatement, y = d_urban), color = "black") +
+  geom_line(data = ag_inv, aes(x = reduced_water_use_abatement, y = d_ag), color = "green") +
+  geom_line(data = industrial_inv, aes(x = reduced_water_use_abatement, y = d_industrial), color = "grey") +
+  geom_line(data = meat_inv, aes(x = reduced_water_use_abatement, y = d_meat), color = "red") +
+  labs(x = "Water Use, AF (Q)", y = "$/AF Water (P)") +
+  theme_bw()
+
+aggregateplot
+```
